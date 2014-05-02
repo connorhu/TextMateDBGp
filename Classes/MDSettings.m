@@ -155,37 +155,7 @@ static MDSettings *_defaultSettings = nil;
 
 + (id)allocWithZone:(NSZone *)zone
 {
-    return [[self defaultSettings] retain];
-}
-
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
-}
-
-
-- (id)retain
-{
-    return self;
-}
-
-
-- (NSUInteger)retainCount
-{
-    return NSUIntegerMax;
-}
-
-
-- (oneway void)release
-{
-    // Do nothing
-}
-
-
-- (id)autorelease
-{
-    return self;
+    return [MDSettings defaultSettings];
 }
 
 @end
