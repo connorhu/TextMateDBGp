@@ -30,20 +30,25 @@
 
 static MDSettings *_defaultSettings = nil;
 
-@implementation MDSettings
+@interface MDSettings()
+{
+    BOOL _showSideViewOnLeft;
+	NSRect _sideViewLayout;
+	NSRect _mainViewLayout;
+	NSMenuItem *_toggleSplitViewLayoutMenuItem;
+	NSMenuItem *_focusSideViewMenuItem;
+    NSMenuItem *_filterInDrawerMenuItem;
+    NSMenuItem *_navigatorViewMenuItem;
+    NSMenuItem *_debuggerViewMenuItem;
+    NSMenuItem *_breakpointsViewMenuItem;
+	NSColor *_bgColor;
+	NSColor *_bgColorInactive;
+	NSDictionary *_namedColors;
+}
 
-@synthesize showSideViewOnLeft = _showSideViewOnLeft;
-@synthesize sideViewLayout = _sideViewLayout;
-@synthesize mainViewLayout = _mainViewLayout;
-@synthesize toggleSplitViewLayoutMenuItem = _toggleSplitViewLayoutMenuItem;
-@synthesize focusSideViewMenuItem = _focusSideViewMenuItem;
-@synthesize filterInDrawerMenuItem = _filterInDrawerMenuItem;
-@synthesize navigatorViewMenuItem = _navigatorViewMenuItem;
-@synthesize debuggerViewMenuItem = _debuggerViewMenuItem;
-@synthesize breakpointsViewMenuItem = _breakpointsViewMenuItem;
-@synthesize bgColor = _bgColor;
-@synthesize bgColorInactive = _bgColorInactive;
-@synthesize namedColors = _namedColors; 
+@end
+
+@implementation MDSettings
 
 - (id)init {
 	if (!(self = [super init]))

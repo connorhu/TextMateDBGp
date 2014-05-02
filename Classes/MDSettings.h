@@ -27,21 +27,7 @@
 //
 
 @interface MDSettings : NSObject {
-	
-@private
-	
-	BOOL _showSideViewOnLeft;
-	NSRect _sideViewLayout;
-	NSRect _mainViewLayout;
-	NSMenuItem *_toggleSplitViewLayoutMenuItem;
-	NSMenuItem *_focusSideViewMenuItem;
-  NSMenuItem *_filterInDrawerMenuItem;
-  NSMenuItem *_navigatorViewMenuItem;
-  NSMenuItem *_debuggerViewMenuItem;
-  NSMenuItem *_breakpointsViewMenuItem;
-	NSColor *_bgColor;
-	NSColor *_bgColorInactive;
-	NSDictionary *_namedColors;
+
 }
 
 @property (nonatomic, readonly) NSMenuItem *toggleSplitViewLayoutMenuItem;
