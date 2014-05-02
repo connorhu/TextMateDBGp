@@ -24,5 +24,7 @@
 	<string>1.0.3</string>
 	<key>NSPrincipalClass</key>
 	<string>TextMateDBGp</string>
+	<key>TMPlugInAPIVersion</key>
+	<integer>2</integer>
 </dict>
 </plist>
