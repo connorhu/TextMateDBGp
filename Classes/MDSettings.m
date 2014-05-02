@@ -99,7 +99,8 @@ static MDSettings *_defaultSettings = nil;
 	return self;
 }
 
-- (IBAction)toggleSideViewLayout:(id)sender {
+- (IBAction)toggleSideViewLayout:(id)sender
+{
 	MDLog();
 	self.showSideViewOnLeft = !self.showSideViewOnLeft;
 	[self save];
@@ -110,24 +111,30 @@ static MDSettings *_defaultSettings = nil;
 	}
 }
 
-- (IBAction)focusSideView:(id)sender{
+- (IBAction)focusSideView:(id)sender
+{
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"MDFocusSideViewPressed" object:nil];
 }
 
-- (IBAction)filterInDrawer:(id)sender {
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"MDFilterInDrawerNotification" object:nil];
+- (IBAction)filterInDrawer:(id)sender
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MDFilterInDrawerNotification" object:nil];
 }
 
-- (void)showView:(id)sender {
-  NSNumber* viewIndex = [NSNumber numberWithInt:SidebarTabNavigator];
-  if (sender == _debuggerViewMenuItem)
-    viewIndex = [NSNumber numberWithInt:SidebarTabDebugger];
-  else if (sender == _breakpointsViewMenuItem)
-    viewIndex = [NSNumber numberWithInt:SidebarTabBreakpoint];
-  [[NSNotificationCenter defaultCenter] postNotificationName:TDSidebarShowViewNotification object:viewIndex];
+- (void)showView:(id)sender
+{
+    NSNumber *viewIndex = [NSNumber numberWithInt:SidebarTabNavigator];
+    if (sender == _debuggerViewMenuItem) {
+        viewIndex = [NSNumber numberWithInt:SidebarTabDebugger];
+    }
+    else if (sender == _breakpointsViewMenuItem) {
+        viewIndex = [NSNumber numberWithInt:SidebarTabBreakpoint];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:TDSidebarShowViewNotification object:viewIndex];
 }
 
-- (void)save {
+- (void)save
+{
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:NSStringFromRect(self.sideViewLayout) forKey:kMDSideViewFrameKey];
 	[defaults setObject:NSStringFromRect(self.mainViewLayout) forKey:kMDMainViewFrameKey];
@@ -137,41 +144,48 @@ static MDSettings *_defaultSettings = nil;
 
 #pragma mark Singleton
 
-+ (MDSettings *)defaultSettings {
-  if (_defaultSettings == nil) {
-    _defaultSettings = [[super allocWithZone:NULL] init];
-  }
-  return _defaultSettings;
++ (MDSettings *)defaultSettings
+{
+    if (_defaultSettings == nil) {
+        _defaultSettings = [[super allocWithZone:NULL] init];
+    }
+    return _defaultSettings;
 }
 
 
-+ (id)allocWithZone:(NSZone *)zone {
-  return [[self defaultSettings] retain];
++ (id)allocWithZone:(NSZone *)zone
+{
+    return [[self defaultSettings] retain];
 }
 
 
-- (id)copyWithZone:(NSZone *)zone {
-  return self;
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
 }
 
 
-- (id)retain {
-  return self;
+- (id)retain
+{
+    return self;
 }
 
 
-- (NSUInteger)retainCount {
-  return NSUIntegerMax;
+- (NSUInteger)retainCount
+{
+    return NSUIntegerMax;
 }
 
 
-- (oneway void)release {
-  // Do nothing
+- (oneway void)release
+{
+    // Do nothing
 }
 
 
-- (id)autorelease {
-  return self;
+- (id)autorelease
+{
+    return self;
 }
 
 @end
