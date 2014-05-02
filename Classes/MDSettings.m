@@ -59,7 +59,8 @@ static MDSettings *_defaultSettings = nil;
     
     // initially register defaults from bundled defaultSettings.plist file
     NSBundle *pluginBundle = [NSBundle bundleForClass:[self class]];
-    [defaults registerDefaults:[[NSDictionary alloc] initWithContentsOfFile:[pluginBundle pathForResource:@"defaultSettings" ofType:@"plist"]]];
+    NSDictionary *bundledDefaultSettings = [[NSDictionary alloc] initWithContentsOfFile:[pluginBundle pathForResource:@"defaultSettings" ofType:@"plist"]];
+    [defaults registerDefaults:bundledDefaultSettings];
     [defaults synchronize];
     
     self.sideViewLayout = NSRectFromString([defaults objectForKey:kMDSideViewFrameKey]);
