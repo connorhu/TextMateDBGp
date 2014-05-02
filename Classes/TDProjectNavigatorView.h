@@ -26,30 +26,16 @@
 //	OTHER DEALINGS IN THE SOFTWARE.
 //
 
-@class TDOutlineViewDataSource;
-@class TDProject;
-@class TDSearchField;
-@class TDSidebar;
+#import "TDOutlineViewDataSource.h"
+#import "TDProject.h"
+#import "TDSearchField.h"
+#import "TDSidebar.h"
 
-@interface TDProjectNavigatorView : NSView {
-@private
-  IBOutlet NSView* toolbar;
-  IBOutlet NSView* contentView;
+@interface TDProjectNavigatorView : NSView
 
-  NSMutableArray* _toolbarButtons;
-  TDSidebar* _sidebar; // weak
-  NSOutlineView* _outlineView;
-  TDOutlineViewDataSource* _outlineViewDataSource;
-  NSScrollView* _outlineScrollContainer;
-  dispatch_queue_t _filterQueue;
-  NSMutableArray *_fullOutlineViewExpandedItems;
-  TDProject* _project;
-  TDSearchField* _searchField;
-}
-
-@property (assign) NSView* toolbar;
-@property (assign) NSView* contentView;
-@property (assign) TDSidebar* sidebar;
+@property (assign) NSView *toolbar;
+@property (assign) NSView *contentView;
+@property (assign) TDSidebar *sidebar;
 @property (nonatomic,retain) TDProject* project;
 @property (nonatomic,readonly) NSOutlineView* outlineView;
 @property (readonly) dispatch_queue_t filterQueue;

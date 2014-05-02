@@ -33,21 +33,19 @@
 
 @synthesize preferencesView;
 
-static MDPreferenceController *sharedInstance = nil;
 
-+ (MDPreferenceController *)instance {
-	@synchronized (self) {
-		if (sharedInstance == nil) {
-			[[self alloc] init];
-		}
-	}
-	return sharedInstance;
++ (instancetype)instance {
+    static id instanceObject = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instanceObject = [[self alloc] init];
+    });
+    
+    return instanceObject;
 }
 
 - (id)init {
 	if ((self = [super init])) {
-		sharedInstance = self;
-		
 		// Load the preference NIB
 		NSString* nibPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"Preferences" ofType:@"nib"];
 		_preferenceWindowController = [[NSWindowController alloc] initWithWindowNibPath:nibPath owner:self];
@@ -66,7 +64,6 @@ static MDPreferenceController *sharedInstance = nil;
 	
 	NSString *string = [[NSString alloc] initWithFormat:@"TextMateDBGp %@", version];
 	[versionTextField setStringValue:string];
-	[string release];
 }
 
 @end

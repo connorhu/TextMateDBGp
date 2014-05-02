@@ -35,6 +35,18 @@
 #import "TDSearchField.h"
 #import "TDSidebar.h"
 
+@interface TDProjectNavigatorView()
+{
+    NSMutableArray *_toolbarButtons;
+    TDOutlineViewDataSource *_outlineViewDataSource;
+    NSScrollView *_outlineScrollContainer;
+    dispatch_queue_t _filterQueue;
+    NSMutableArray *_fullOutlineViewExpandedItems;
+    TDSearchField *_searchField;
+}
+
+@end
+
 NSComparisonResult compareFrameOriginX(id viewA, id viewB, void *context) {
   float v1 = [viewA frame].origin.x;
   float v2 = [viewB frame].origin.x;
@@ -83,30 +95,16 @@ NSComparisonResult compareFrameOriginX(id viewA, id viewB, void *context) {
 @end;
 
 @implementation TDProjectNavigatorView
-@synthesize toolbar;
-@synthesize contentView;
-@synthesize outlineView = _outlineView;
-@synthesize filterQueue = _filterQueue;
-@synthesize project = _project;
-@synthesize sidebar = _sidebar;
 
 + (void)load {
   [OakOutlineView jr_swizzleMethod:@selector(reloadItem:reloadChildren:) withMethod:@selector(TD_reloadItem:reloadChildren:) error:NULL];
 }
 
-- (void)dealloc {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
   
-  dispatch_release(_filterQueue);
-  [_fullOutlineViewExpandedItems release];
-  
-  [_toolbarButtons release];
-  [_searchField release];
-  [_outlineViewDataSource release];
-  [_outlineScrollContainer release];
-  [_outlineView release];
-  [_project release];
-  [super dealloc];
+    dispatch_release(_filterQueue);
 }
 
 - (void)initializeWithDrawer:(NSView *)drawerView {
@@ -120,8 +118,8 @@ NSComparisonResult compareFrameOriginX(id viewA, id viewB, void *context) {
       [_toolbarButtons addObject:aView];
     }
     else if ([aView isKindOfClass:[NSScrollView class]]) {
-      _outlineScrollContainer = [aView retain];
-      _outlineView = [[[_outlineScrollContainer contentView] documentView] retain];
+      _outlineScrollContainer = aView;
+      _outlineView = [[_outlineScrollContainer contentView] documentView];
     }
   }
   [_toolbarButtons sortUsingFunction:(NSInteger (*)(id, id, void *))compareFrameOriginX context:nil];
@@ -143,7 +141,6 @@ NSComparisonResult compareFrameOriginX(id viewA, id viewB, void *context) {
   [terminalButton setTarget:self];
   
   [terminalButton setBordered:NO];
-  [terminalButton release];
   
   float leftLoc = 0;
   for (NSView *button in _toolbarButtons) {
@@ -154,7 +151,7 @@ NSComparisonResult compareFrameOriginX(id viewA, id viewB, void *context) {
     button.frame = buttonFrame;
 		[button setAutoresizingMask:NSViewMaxXMargin];
 		[button removeFromSuperview];
-		[toolbar addSubview:button];
+		[_toolbar addSubview:button];
   }
   
   // Add search field
@@ -170,24 +167,23 @@ NSComparisonResult compareFrameOriginX(id viewA, id viewB, void *context) {
   [_searchField setAutoresizingMask:NSViewWidthSizable];
   [_searchField sizeToFit];
   NSRect frame = _searchField.frame;
-  frame.size.width = toolbar.frame.size.width - leftLoc - SEARCH_FIELD_LEFT_PADDING - SEARCH_FIELD_RIGHT_PADDING;
+  frame.size.width = _toolbar.frame.size.width - leftLoc - SEARCH_FIELD_LEFT_PADDING - SEARCH_FIELD_RIGHT_PADDING;
   _searchField.frame = frame;
-  [toolbar addSubview:_searchField];
+  [_toolbar addSubview:_searchField];
   
   
   // Move the outline out
   [_outlineScrollContainer removeFromSuperview];
   _outlineScrollContainer.borderType = NSNoBorder;
-  _outlineScrollContainer.frame = contentView.bounds;
+  _outlineScrollContainer.frame = _contentView.bounds;
   _outlineScrollContainer.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-  [contentView addSubview:_outlineScrollContainer];
+  [_contentView addSubview:_outlineScrollContainer];
   
   NSFont *font = [NSFont fontWithName:@"Lucida Grande" size:12];
   NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init]; 
   [_outlineView setRowHeight:[layoutManager defaultLineHeightForFont:font]];
   [_outlineView setIntercellSpacing:NSMakeSize (4.0, 2.0)];
   _project.originalOutlineView = _outlineView;
-  [layoutManager release];
   
   // Swap the original data source with ours
   _outlineViewDataSource = [[TDOutlineViewDataSource alloc] initWithOriginalDataSource:_outlineView.dataSource];
@@ -211,7 +207,6 @@ NSComparisonResult compareFrameOriginX(id viewA, id viewB, void *context) {
   NSString* appleScriptCommand = [NSString stringWithFormat:@"activate application \"Terminal\"\n\ttell application \"System Events\"\n\tkeystroke \"t\" using {command down}\n\tend tell\n\ttell application \"Terminal\"\n\trepeat with win in windows\n\ttry\n\tif get frontmost of win is true then\n\tdo script \"cd \\\"%@\\\"; clear\" in (selected tab of win)\n\tend if\n\tend try\n\tend repeat\n\tend tell", path];
 	NSAppleScript *as = [[NSAppleScript alloc] initWithSource: appleScriptCommand];
 	[as executeAndReturnError:nil];
-	[as release];
 	return;
 }
 
@@ -324,7 +319,7 @@ NSComparisonResult compareFrameOriginX(id viewA, id viewB, void *context) {
 
 - (void)adjustLayout {
   NSRect frame = _searchField.frame;
-  frame.size.width = toolbar.frame.size.width - frame.origin.x - SEARCH_FIELD_RIGHT_PADDING;
+  frame.size.width = _toolbar.frame.size.width - frame.origin.x - SEARCH_FIELD_RIGHT_PADDING;
   _searchField.frame = frame;
 }
 @end

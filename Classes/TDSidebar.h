@@ -26,28 +26,21 @@
 //	OTHER DEALINGS IN THE SOFTWARE.
 //
 
-@class TDBookmarksView;
-@class TDDebugView;
-@class TDProject;
+#import "TDDebugView.h"
+#import "TDProjectNavigatorView.h"
+#import "TDBookmarksView.h"
+#import "TDProject.h"
+
 @class TDProjectNavigatorView;
 
-@interface TDSidebar : NSView <NSMatrixDelegate> {
-@private
-  IBOutlet NSMatrix* toolbar;
-  IBOutlet NSView* contentView;
-  
-  TDProjectNavigatorView* _navigatorView;
-  TDDebugView* _debugView;
-  TDBookmarksView* _bookmarksView;
-  TDProject* _project;
-}
+@interface TDSidebar : NSView <NSMatrixDelegate>
 
-@property (assign) NSMatrix* toolbar;
-@property (assign) NSView* contentView;
-@property (nonatomic,retain) IBOutlet TDProjectNavigatorView* navigatorView;
-@property (nonatomic,retain) IBOutlet TDDebugView* debugView;
-@property (nonatomic,retain) IBOutlet TDBookmarksView* bookmarksView;
-@property (nonatomic,readonly) TDProject* project;
+@property (assign) NSMatrix *toolbar;
+@property (assign) NSView *contentView;
+@property (nonatomic,retain) IBOutlet TDProjectNavigatorView *navigatorView;
+@property (nonatomic,retain) IBOutlet TDDebugView *debugView;
+@property (nonatomic,retain) IBOutlet TDBookmarksView *bookmarksView;
+@property (nonatomic,readonly) TDProject *project;
 
 - (void)adjustLayout;
 - (IBAction)toolbarClicked:(id)sender;

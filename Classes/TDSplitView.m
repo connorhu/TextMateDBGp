@@ -39,11 +39,9 @@
 
 #pragma mark NSObject
 
-- (void)dealloc {
+- (void)dealloc
+{
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[_sidebar release];
-	[_mainView release];
-	[super dealloc];
 }
 
 
@@ -64,8 +62,8 @@
   
   [self setDelegate:self];
   
-  _mainView = [aMainView retain];
-  _sidebar = [aSideView retain];
+  _mainView = aMainView;
+  _sidebar = aSideView;
   [self setVertical:YES];
   
   if([MDSettings defaultSettings].showSideViewOnLeft) {
@@ -100,10 +98,9 @@
 #pragma mark Drawing
 
 - (void)toggleLayout {
-  NSView *leftView = [[[self subviews] objectAtIndex:0] retain];
+  NSView *leftView = [[self subviews] objectAtIndex:0];
   [leftView removeFromSuperview];
   [self addSubview:leftView];
-  [leftView release];
   [self adjustSubviews];
 }
 
@@ -119,11 +116,11 @@
   }
   [self saveLayout];
   
-  if (self.sidebar){
+  if (_sidebar){
     NSDrawer *drawer = [[[self window] drawers] objectAtIndex:0];
-    [self.sidebar removeFromSuperview];
+    [_sidebar removeFromSuperview];
     [drawer setContentView:self.sidebar];
-    [_sidebar release], _sidebar = nil;
+    _sidebar = nil;
   }
 }
 

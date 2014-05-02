@@ -35,17 +35,24 @@
 #import "TDProject.h"
 #import "TDProjectNavigatorView.h"
 
+@interface TDSidebar()
+{
+    IBOutlet NSMatrix* toolbar;
+    IBOutlet NSView* contentView;
+    
+    TDProjectNavigatorView* _navigatorView;
+    TDDebugView* _debugView;
+    TDBookmarksView* _bookmarksView;
+    TDProject* _project;
+}
+
+@end
+
 @interface TDSidebar ()
 - (void)menuItemClicked:(id)sender;
 @end
 
 @implementation TDSidebar
-@synthesize project = _project;
-@synthesize toolbar;
-@synthesize contentView;
-@synthesize navigatorView = _navigatorView;
-@synthesize debugView = _debugView;
-@synthesize bookmarksView = _bookmarksView;
 
 - (id)initWithFrame:(NSRect)frameRect {
   if (!(self = [super initWithFrame:frameRect]))
@@ -53,14 +60,6 @@
   _project = [[TDProject alloc] init];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuItemClicked:) name:TDSidebarShowViewNotification object:nil];
   return self;
-}
-
-- (void)dealloc {
-  self.navigatorView = nil;
-  self.debugView = nil;
-  self.bookmarksView = nil;
-  [_project release];
-  [super dealloc];
 }
 
 - (TDProjectNavigatorView *)navigatorView {

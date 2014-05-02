@@ -56,7 +56,6 @@
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
     [[NSUserDefaultsController sharedUserDefaultsController] setInitialValues:defaults];
-    [defaults release];
     
     [OakProjectController jr_swizzleMethod:@selector(windowDidLoad) withMethod:@selector(MD_repl_windowDidLoad) error:NULL];
     [OakProjectController jr_swizzleMethod:@selector(windowWillClose:) withMethod:@selector(MD_repl_windowWillClose:) error:NULL];
@@ -76,14 +75,14 @@
 + (NSImage *)bundledImageWithName:(NSString *)imageName
 {
 	NSBundle *pluginBundle = [[self class] pluginBundle];
-	return [[[NSImage alloc] initWithContentsOfFile:[pluginBundle pathForResource:imageName ofType:@"png"]] autorelease];
+	return [[NSImage alloc] initWithContentsOfFile:[pluginBundle pathForResource:imageName ofType:@"png"]];
 }
 
 
 + (TDSplitView *)makeSplitViewWithMainView:(NSView *)contentView sideView:(TDSidebar *)sideView
 {
     TDSplitView *splitView = [[TDSplitView alloc] initWithFrame:[contentView frame] mainView:contentView sideView:sideView];
-    return [splitView autorelease];
+    return splitView;
 }
 
 

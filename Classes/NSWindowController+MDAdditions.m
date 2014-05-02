@@ -37,10 +37,6 @@
 #import "TDSplitView.h"
 
 @implementation TDTemporaryOwner
-- (void)dealloc {
-  [sidebar release];
-  [super dealloc];
-}
 @end
 
 @implementation NSWindowController (MDAdditions)
@@ -60,8 +56,7 @@
   if (!drawer)
     return;
   
-  NSView *drawerView = [[drawer contentView] retain];
-  [contentView retain];
+  NSView *drawerView = [drawer contentView];
   [drawer setContentView:nil];
   [window setContentView:nil];
   
@@ -75,8 +70,6 @@
   
   [window setContentView:splitView];
   
-  [drawerView release];
-  [contentView release];
   [splitView restoreLayout];
   
   [sidebar selectTab:SidebarTabNavigator];
@@ -86,8 +79,6 @@
   [bookmarkOutlineView endUpdates];
   [bookmarkOutlineView reloadData];
   [bookmarkOutlineView expandItem:nil expandChildren:YES];
-
-  [owner release];
   
   [drawer close]; // does no harm if the drawer is already closed
 }
@@ -110,13 +101,10 @@
                    toObject:[NSUserDefaultsController sharedUserDefaultsController]
                 withKeyPath:keyPath
                     options:bindingOptions];
-  [sidebar.debugView bind:@"backgroundColor"
-                 toObject:[NSUserDefaultsController sharedUserDefaultsController]
-              withKeyPath:keyPath
-                  options:bindingOptions];
-	
-	[bindingOptions release];
-	[keyPath release];
+    [sidebar.debugView bind:@"backgroundColor"
+                   toObject:[NSUserDefaultsController sharedUserDefaultsController]
+                withKeyPath:keyPath
+                    options:bindingOptions];
 }
 
 
@@ -140,8 +128,6 @@
               withKeyPath:keyPath
                   options:bindingOptions];
 	
-	[bindingOptions release];
-	[keyPath release];
 }
 
 @end

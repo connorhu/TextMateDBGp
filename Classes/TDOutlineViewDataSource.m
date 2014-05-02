@@ -42,17 +42,10 @@
   if (!self)
     return self;
   
-  _originalDataSource = [originalDataSource retain];
+  _originalDataSource = originalDataSource;
   _currentFilter = nil;
   _rootDirectoryInfo = [[NSMutableDictionary alloc] init];
   return self;
-}
-
-- (void)dealloc {
-  [_originalDataSource release];
-  [_rootDirectoryInfo release];
-  [_currentFilter release];
-  [super dealloc];
 }
 
 - (BOOL)_recurse:(NSMutableDictionary*)node :(NSRegularExpression*)regex {
@@ -66,7 +59,6 @@
   if (children) {
     NSMutableArray* newChildren = [children mutableCopy];
     [node setObject:newChildren forKey:@"children"];
-    [newChildren release];
     
     int index = 0;
     while (index < [newChildren count]) {
@@ -76,12 +68,10 @@
         NSMutableDictionary* newItem = [item mutableCopy];
         if (![self _recurse:newItem :regex]) {
           [newChildren removeObjectAtIndex:index];
-          [newItem release];
           continue;
         }
         
         [newChildren replaceObjectAtIndex:index withObject:newItem];
-        [newItem release];
         isItselfOrHasChildrenThatPassesFilter |= YES;
       }
       else {
@@ -119,7 +109,6 @@
     NSMutableDictionary* newRoot = [root mutableCopy];
     [self _recurse:newRoot :regex];
     [_rootDirectoryInfo setObject:newRoot forKey:[root objectForKey:@"sourceDirectory"]];
-    [newRoot release];
   }
 }
 

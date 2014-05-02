@@ -31,26 +31,7 @@
 @class TDProject;
 @class TDSidebar;
 
-@interface TDDebugView : NSView <GCDAsyncSocketDelegate, NSTableViewDataSource, NSTableViewDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate> {
-@private
-  IBOutlet NSButton* connectButton;
-  IBOutlet NSButton* firstLineButton;
-  IBOutlet NSTextField* connectionLabel;
-  IBOutlet NSTextField* statusLabel;
-
-  IBOutlet NSButton* debugPlayButton;
-  IBOutlet NSButton* debugStepOverButton;
-  IBOutlet NSButton* debugStepInButton;
-  IBOutlet NSButton* debugStepOutButton;
-  IBOutlet NSButton* bookmarksButton;
-  
-  IBOutlet NSTableView* stackTableView;
-  IBOutlet NSOutlineView* variableOutlineView;
-
-  TDProject* _project;
-  TDSidebar* _sidebar; //weak
-  NSColor* _backgroundColor;
-}
+@interface TDDebugView : NSView <GCDAsyncSocketDelegate, NSTableViewDataSource, NSTableViewDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate>
 
 @property (nonatomic,retain) TDProject* project;
 @property (nonatomic,assign) TDSidebar* sidebar;

@@ -40,6 +40,16 @@
 #import "TDStackFrame.h"
 #import "TDStackVariable.h"
 
+@interface TDDebugView()
+{
+    TDProject *_project;
+    __weak TDSidebar *_sidebar;
+    NSColor *_backgroundColor;
+}
+
+@end
+
+
 @interface TDDebugView (PrivateMethods)
 - (void)didAcceptNewSocket:(NSNotification*)notification;
 - (void)didDisconnectSocket:(NSNotification*)notification;
@@ -50,23 +60,6 @@
 @end
 
 @implementation TDDebugView
-@synthesize project = _project;
-@synthesize backgroundColor = _backgroundColor;
-@synthesize sidebar = _sidebar;
-
-@synthesize connectButton;
-@synthesize firstLineButton;
-@synthesize statusLabel;
-@synthesize connectionLabel;
-
-@synthesize debugPlayButton;
-@synthesize debugStepInButton;
-@synthesize debugStepOutButton;
-@synthesize debugStepOverButton;
-@synthesize bookmarksButton;
-
-@synthesize stackTableView;
-@synthesize variableOutlineView;
 
 // This is called when the nib is loaded.
 - (id)initWithFrame:(NSRect)frameRect {
