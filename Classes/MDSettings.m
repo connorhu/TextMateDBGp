@@ -50,52 +50,53 @@ static MDSettings *_defaultSettings = nil;
 
 @implementation MDSettings
 
-- (id)init {
-	if (!(self = [super init]))
-    return nil;
+- (id)init
+{
+    self = [super init];
+    if (!self) return nil;
   
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  
-  // initially register defaults from bundled defaultSettings.plist file
-  NSBundle *pluginBundle = [NSBundle bundleForClass:[self class]];
-  NSDictionary *bundledDefaultSettings = [[NSDictionary alloc] initWithContentsOfFile:[pluginBundle pathForResource:@"defaultSettings" ofType:@"plist"]];
-  [defaults registerDefaults:bundledDefaultSettings];
-  [bundledDefaultSettings release];
-  [defaults synchronize];
-  
-  self.sideViewLayout = NSRectFromString([defaults objectForKey:kMDSideViewFrameKey]);
-  self.mainViewLayout = NSRectFromString([defaults objectForKey:kMDMainViewFrameKey]);
-  self.showSideViewOnLeft = [defaults boolForKey:kMDSideViewLeftKey];
-  
-  NSString *menuTitle = self.showSideViewOnLeft ? @"Show on the Right" : @"Show on the Left";
-  _toggleSplitViewLayoutMenuItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:@selector(toggleSideViewLayout:) keyEquivalent:@""];
-  [_toggleSplitViewLayoutMenuItem setTarget:self];
-  [_toggleSplitViewLayoutMenuItem setEnabled:YES];
-  
-  _focusSideViewMenuItem = [[NSMenuItem alloc] initWithTitle:@"Focus Sideview" action:@selector(focusSideView:) keyEquivalent:@"["];
-  [_focusSideViewMenuItem setKeyEquivalentModifierMask:(NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask)];
-  [_focusSideViewMenuItem setTarget:self];
-  [_focusSideViewMenuItem setEnabled:YES];
-  
-  _filterInDrawerMenuItem = [[NSMenuItem alloc] initWithTitle:@"Filter in Drawer" action:@selector(filterInDrawer:) keyEquivalent:@"j"];
-  [_filterInDrawerMenuItem setKeyEquivalentModifierMask:(NSAlternateKeyMask | NSCommandKeyMask)];
-  [_filterInDrawerMenuItem setTarget:self];
-  [_filterInDrawerMenuItem setEnabled:YES];
-  
-  _navigatorViewMenuItem = [[NSMenuItem alloc] initWithTitle:@"Navigator View" action:@selector(showView:) keyEquivalent:@"1"];
-  [_navigatorViewMenuItem setKeyEquivalentModifierMask:(NSControlKeyMask | NSCommandKeyMask)];
-  [_navigatorViewMenuItem setTarget:self];
-  [_navigatorViewMenuItem setEnabled:YES];
-
-  _debuggerViewMenuItem = [[NSMenuItem alloc] initWithTitle:@"Debugger View" action:@selector(showView:) keyEquivalent:@"2"];
-  [_debuggerViewMenuItem setKeyEquivalentModifierMask:(NSControlKeyMask | NSCommandKeyMask)];
-  [_debuggerViewMenuItem setTarget:self];
-  [_debuggerViewMenuItem setEnabled:YES];
-  
-  _breakpointsViewMenuItem = [[NSMenuItem alloc] initWithTitle:@"Breakpoints View" action:@selector(showView:) keyEquivalent:@"3"];
-  [_breakpointsViewMenuItem setKeyEquivalentModifierMask:(NSControlKeyMask | NSCommandKeyMask)];
-  [_breakpointsViewMenuItem setTarget:self];
-  [_breakpointsViewMenuItem setEnabled:YES];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    // initially register defaults from bundled defaultSettings.plist file
+    NSBundle *pluginBundle = [NSBundle bundleForClass:[self class]];
+    NSDictionary *bundledDefaultSettings = [[NSDictionary alloc] initWithContentsOfFile:[pluginBundle pathForResource:@"defaultSettings" ofType:@"plist"]];
+    [defaults registerDefaults:bundledDefaultSettings];
+    [bundledDefaultSettings release];
+    [defaults synchronize];
+    
+    self.sideViewLayout = NSRectFromString([defaults objectForKey:kMDSideViewFrameKey]);
+    self.mainViewLayout = NSRectFromString([defaults objectForKey:kMDMainViewFrameKey]);
+    self.showSideViewOnLeft = [defaults boolForKey:kMDSideViewLeftKey];
+    
+    NSString *menuTitle = self.showSideViewOnLeft ? @"Show on the Right" : @"Show on the Left";
+    _toggleSplitViewLayoutMenuItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:@selector(toggleSideViewLayout:) keyEquivalent:@""];
+    [_toggleSplitViewLayoutMenuItem setTarget:self];
+    [_toggleSplitViewLayoutMenuItem setEnabled:YES];
+    
+    _focusSideViewMenuItem = [[NSMenuItem alloc] initWithTitle:@"Focus Sideview" action:@selector(focusSideView:) keyEquivalent:@"["];
+    [_focusSideViewMenuItem setKeyEquivalentModifierMask:(NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask)];
+    [_focusSideViewMenuItem setTarget:self];
+    [_focusSideViewMenuItem setEnabled:YES];
+    
+    _filterInDrawerMenuItem = [[NSMenuItem alloc] initWithTitle:@"Filter in Drawer" action:@selector(filterInDrawer:) keyEquivalent:@"j"];
+    [_filterInDrawerMenuItem setKeyEquivalentModifierMask:(NSAlternateKeyMask | NSCommandKeyMask)];
+    [_filterInDrawerMenuItem setTarget:self];
+    [_filterInDrawerMenuItem setEnabled:YES];
+    
+    _navigatorViewMenuItem = [[NSMenuItem alloc] initWithTitle:@"Navigator View" action:@selector(showView:) keyEquivalent:@"1"];
+    [_navigatorViewMenuItem setKeyEquivalentModifierMask:(NSControlKeyMask | NSCommandKeyMask)];
+    [_navigatorViewMenuItem setTarget:self];
+    [_navigatorViewMenuItem setEnabled:YES];
+    
+    _debuggerViewMenuItem = [[NSMenuItem alloc] initWithTitle:@"Debugger View" action:@selector(showView:) keyEquivalent:@"2"];
+    [_debuggerViewMenuItem setKeyEquivalentModifierMask:(NSControlKeyMask | NSCommandKeyMask)];
+    [_debuggerViewMenuItem setTarget:self];
+    [_debuggerViewMenuItem setEnabled:YES];
+    
+    _breakpointsViewMenuItem = [[NSMenuItem alloc] initWithTitle:@"Breakpoints View" action:@selector(showView:) keyEquivalent:@"3"];
+    [_breakpointsViewMenuItem setKeyEquivalentModifierMask:(NSControlKeyMask | NSCommandKeyMask)];
+    [_breakpointsViewMenuItem setTarget:self];
+    [_breakpointsViewMenuItem setEnabled:YES];
 	return self;
 }
 
