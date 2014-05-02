@@ -129,13 +129,19 @@ static const short _base64DecodingTable[256] = {
 	}
   
 	// Cleanup and setup the return NSData
-	return [[[NSData alloc] initWithBytesNoCopy:objResult length:j freeWhenDone:YES] autorelease];
+	return [[NSData alloc] initWithBytesNoCopy:objResult length:j freeWhenDone:YES];
 }
 
 @end
 
 
 @interface TDStackVariable ()
+{
+    BOOL _isBase64Encoding;
+    NSMutableAttributedString *_cachedAttrString;
+    NSMutableArray *_variables;
+}
+
 @property (nonatomic,readwrite,retain) NSString* address;
 @property (nonatomic,readwrite,retain) NSString* name;
 @property (nonatomic,readwrite,retain) NSString* fullName;
@@ -143,24 +149,10 @@ static const short _base64DecodingTable[256] = {
 @property (nonatomic,readwrite,retain) NSString* type;
 @property (nonatomic,readwrite,retain) NSString* className;
 @property (nonatomic,readwrite,retain) NSString* value;
+
 @end
 
 @implementation TDStackVariable
-@synthesize address = _address;
-@synthesize name = _name;
-@synthesize fullName = _fullName;
-@synthesize className = _className;
-@synthesize type = _type;
-@synthesize facet = _facet;
-@synthesize size = _size;
-@synthesize key = _key;
-@synthesize page = _page;
-@synthesize pageSize = _pageSize;
-@synthesize hasChildren = _hasChildren;
-@synthesize numChildren = _numChildren;
-@synthesize variables = _variables;
-@synthesize value = _value;
-@synthesize stackContext = _stackContext;
 
 - (id)init {
   if (!(self = [super init]))
@@ -172,21 +164,6 @@ static const short _base64DecodingTable[256] = {
   _numChildren = 0;
   _isBase64Encoding = NO;
   return self;
-}
-
-- (void)dealloc {
-  self.address = nil;
-  self.name = nil;
-  self.fullName = nil;
-  self.className = nil;
-  self.type = nil;
-  self.facet = nil;
-  [_size release];
-  [_key release];
-  [_variables release];
-  [_cachedAttrString release];
-  self.value = nil;
-  [super dealloc];
 }
 
 - (NSString *)description {
@@ -213,9 +190,9 @@ static const short _base64DecodingTable[256] = {
   if ([xmlProperty attributeForName:@"facet"])
     self.facet = [[xmlProperty attributeForName:@"facet"] stringValue];
   if ([xmlProperty attributeForName:@"size"])
-    _size = [[[xmlProperty attributeForName:@"size"] stringValue] retain];
+    _size = [[xmlProperty attributeForName:@"size"] stringValue];
   if ([xmlProperty attributeForName:@"key"])
-    _key = [[[xmlProperty attributeForName:@"key"] stringValue] retain];
+    _key = [[xmlProperty attributeForName:@"key"] stringValue];
   
   if ([xmlProperty attributeForName:@"children"])
     _hasChildren = [[[xmlProperty attributeForName:@"children"] stringValue] isEqualToString:@"1"];
@@ -225,7 +202,6 @@ static const short _base64DecodingTable[256] = {
   if ([xmlProperty attributeForName:@"encoding"])
     _isBase64Encoding = [[[xmlProperty attributeForName:@"encoding"] stringValue] isEqualToString:@"base64"];
   
-  [_cachedAttrString release];
   _cachedAttrString = nil;
 }
 
@@ -241,7 +217,6 @@ static const short _base64DecodingTable[256] = {
     
     TDStackVariable* variable = [[TDStackVariable alloc] init];
     [_variables addObject:variable];
-    [variable release];
     
     variable.stackContext = _stackContext;
     [variable parsePropertyAttributes:xmlProperty];
@@ -262,7 +237,6 @@ static const short _base64DecodingTable[256] = {
   [_variables addObject:placeholder];
   [_stackContext.stackFrame addPendingLoad:placeholder
                                forVariable:_fullName];
-  [placeholder release];
 }
 
 - (void)parseValue:(NSString*)xmlValue {
@@ -273,9 +247,8 @@ static const short _base64DecodingTable[256] = {
     self.value = xmlValue;
     return;
   }
-  NSData* decodedData = [[NSData decodeBase64WithString:xmlValue] retain];
+  NSData* decodedData = [NSData decodeBase64WithString:xmlValue];
   self.value = [NSString stringWithCString:decodedData.bytes encoding:NSUTF8StringEncoding];
-  [decodedData release];
 }
 
 - (NSAttributedString *)attributedStringWithDefaultFont:(NSFont*)font {

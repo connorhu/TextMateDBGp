@@ -32,14 +32,13 @@
   NSString* _name;
   int _id;
   NSMutableArray* _variables;
-  TDStackFrame* _stackFrame; // weak
 }
 
 @property (nonatomic,retain) NSString* name;
 @property (nonatomic) int contextId;
 // if null then not loaded
 @property (nonatomic,readonly) NSArray* variables;
-@property (nonatomic,assign) TDStackFrame* stackFrame;
+@property (weak, nonatomic) TDStackFrame *stackFrame;
 
 - (BOOL)variablesLoaded;
 - (void)parseProperties:(NSArray*)xmlProperties;

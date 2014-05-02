@@ -42,26 +42,22 @@
   if (!(self = [super init]))
     return nil;
   _contexts = [[NSMutableArray alloc] init];
-  _xmlElement = [stackFrame retain];
+  _xmlElement = stackFrame;
   _countOutlineItems = 0;
   _pendingVariableLoads = [[NSMutableDictionary alloc] init];
   return self;
 }
 - (id)copyWithZone:(NSZone *)zone {
   TDStackFrame* copy = [[TDStackFrame allocWithZone:zone] init];
-  copy->_contexts = [_contexts retain];
-  copy->_xmlElement = [_xmlElement retain];
-  copy->_pendingVariableLoads = [_pendingVariableLoads retain];
+  copy->_contexts = _contexts;
+  copy->_xmlElement = _xmlElement;
+  copy->_pendingVariableLoads = _pendingVariableLoads;
   return copy;
 }
-- (void)dealloc {
-  [_pendingVariableLoads release];
-  [_xmlElement release];
-  [_contexts release];
-  [super dealloc];
-}
-- (NSString *)description {
-  return [NSString stringWithFormat:@"<%@: 0x%x, level: %d, function: %@:%d, fileName: %@, contexts: %@", [[self class] description], (long)self, [self stackLevel], [self stackFunction], [self lineNumber], [self fileName], _contexts];
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: 0x%x, level: %d, function: %@:%d, fileName: %@, contexts: %@", [[self class] description], (long)self, [self stackLevel], [self stackFunction], [self lineNumber], [self fileName], _contexts];
 }
 - (int)stackLevel {
   return [[[_xmlElement attributeForName:@"level"] stringValue] intValue];
@@ -119,7 +115,6 @@
     TDStackContext* context = [[TDStackContext alloc] init];
     NSAssert([[[xmlContext attributeForName:@"id"] stringValue] intValue] == [_contexts count], @"Mismatch");
     [_contexts addObject:context];
-    [context release];
     
     context.stackFrame = self;
     context.name = [[xmlContext attributeForName:@"name"] stringValue];

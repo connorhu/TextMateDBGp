@@ -40,16 +40,6 @@
 #import "TDStackFrame.h"
 #import "TDStackVariable.h"
 
-@interface TDDebugView()
-{
-    TDProject *_project;
-    __weak TDSidebar *_sidebar;
-    NSColor *_backgroundColor;
-}
-
-@end
-
-
 @interface TDDebugView (PrivateMethods)
 - (void)didAcceptNewSocket:(NSNotification*)notification;
 - (void)didDisconnectSocket:(NSNotification*)notification;
@@ -74,12 +64,6 @@
   return self;
 }
 
-- (void)dealloc {
-  self.project = nil;
-  self.backgroundColor = nil;
-  [super dealloc];
-}
-
 - (void)drawRect:(NSRect)dirtyRect {
   // set any NSColor for filling, say white:
   if (!_backgroundColor)
@@ -91,50 +75,50 @@
 #pragma mark Notification
 - (void)didAcceptNewSocket:(NSNotification*)notification {
   if ([_project.networkController currentOpenSession])
-    [connectionLabel setStringValue:@"1 cxn"];
+    [_connectionLabel setStringValue:@"1 cxn"];
   else
-    [connectionLabel setStringValue:@"? cxn"];
+    [_connectionLabel setStringValue:@"? cxn"];
 }
 - (void)didDisconnectSocket:(NSNotification*)notification {
   if (![_project.networkController currentOpenSession])
-    [connectionLabel setStringValue:@""];
+    [_connectionLabel setStringValue:@""];
   else
-    [connectionLabel setStringValue:@"? dcxn"];
+    [_connectionLabel setStringValue:@"? dcxn"];
 }
 - (void)sessionUpdated:(NSNotification*)notification {
   TDDebugSession* session = [notification object];
-  [statusLabel setStringValue:[NSString stringWithFormat:@"%@/%@", session.lastReason, session.lastStatus]];
-  [stackTableView deselectAll:self];
-  [stackTableView reloadData];
+  [_statusLabel setStringValue:[NSString stringWithFormat:@"%@/%@", session.lastReason, session.lastStatus]];
+  [_stackTableView deselectAll:self];
+  [_stackTableView reloadData];
   if ([session.lastStatus isEqualToString:DBGpStatusBreak]) {
     [NSApp activateIgnoringOtherApps:YES];
     [_sidebar selectTab:SidebarTabDebugger];
     
     [self setToolbarDisabled:NO];
-    [debugPlayButton.cell setImage:[TextMateDBGp bundledImageWithName:@"DebugPlay"]];
-    [stackTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+    [_debugPlayButton.cell setImage:[TextMateDBGp bundledImageWithName:@"DebugPlay"]];
+    [_stackTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
   }
   else {
     [self setToolbarDisabled:YES];
     // clear out the variable view
-    [variableOutlineView reloadData];
+    [_variableOutlineView reloadData];
   }
 }
 - (void)sessionLoadedVariables:(NSNotification*)notification {
-  [variableOutlineView reloadData];
+  [_variableOutlineView reloadData];
 }
 - (void)sessionUpdatedVariable:(NSNotification *)notification {
   id variable = [notification object];
-  [variableOutlineView reloadData];
-  [variableOutlineView expandItem:variable expandChildren:NO];
+  [_variableOutlineView reloadData];
+  [_variableOutlineView expandItem:variable expandChildren:NO];
 }
 - (void)setToolbarDisabled:(BOOL)disabled {
-  [debugPlayButton setEnabled:!disabled];
-  [debugStepInButton setEnabled:!disabled];
-  [debugStepOutButton setEnabled:!disabled];
-  [debugStepOverButton setEnabled:!disabled];
+  [_debugPlayButton setEnabled:!disabled];
+  [_debugStepInButton setEnabled:!disabled];
+  [_debugStepOutButton setEnabled:!disabled];
+  [_debugStepOverButton setEnabled:!disabled];
   if (disabled)
-    [debugPlayButton.cell setImage:[TextMateDBGp bundledImageWithName:@"DebugPause"]];
+    [_debugPlayButton.cell setImage:[TextMateDBGp bundledImageWithName:@"DebugPause"]];
 }
 
 #pragma mark Actions
@@ -150,22 +134,22 @@
     [button setTitle:@"Connect"];
     [button setToolTip:@"Listen for incoming connections"];
     [nc stopListening];
-    [statusLabel setStringValue:@""];
+    [_statusLabel setStringValue:@""];
   }
 }
 
 - (void)debugButtonPressed:(id)sender {
   TDDebugSession* session = [_project.networkController currentOpenSession];
-  if (sender == debugPlayButton) {
+  if (sender == _debugPlayButton) {
     [session continueDebugSession];
   }
-  else if (sender == debugStepInButton) {
+  else if (sender == _debugStepInButton) {
     [session stepIn];
   }
-  else if (sender == debugStepOutButton) {
+  else if (sender == _debugStepOutButton) {
     [session stepOut];
   }
-  else if (sender == debugStepOverButton) {
+  else if (sender == _debugStepOverButton) {
     [session stepOver];
   }
   [self setToolbarDisabled:YES];
@@ -216,7 +200,7 @@
 #pragma mark NSOutlineViewDataSource
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item {
   if (item == nil) {
-    int selectedRow = [stackTableView selectedRow];
+    int selectedRow = [_stackTableView selectedRow];
     if (selectedRow < 0)
       return nil;
     TDStackFrame* stackFrame = [self tableView:nil objectValueForTableColumn:nil row:selectedRow];
@@ -226,7 +210,7 @@
 }
 - (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
   if (item == nil) {
-    int selectedRow = [stackTableView selectedRow];
+    int selectedRow = [_stackTableView selectedRow];
     if (selectedRow < 0)
       return 0;
     TDStackFrame* stackFrame = [self tableView:nil objectValueForTableColumn:nil row:selectedRow];

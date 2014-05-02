@@ -28,46 +28,44 @@
 
 @class TDStackContext;
 
-@interface TDStackVariable : NSObject {
-  NSMutableArray* _variables;
-  
-  NSString* _address;
-  NSString* _name;
-  NSString* _fullName;
-  NSString* _className;
-  NSString* _type;
-  NSString* _facet;
-  NSString* _size;
-  NSString* _key;
-  
-  int _page;
-  int _pageSize;
-  
-  BOOL _hasChildren;
-  int _numChildren;
-  
-  BOOL _isBase64Encoding;
-  NSString* _value;
-  
-  TDStackContext* _stackContext; // weak
-  NSMutableAttributedString* _cachedAttrString;
-}
+@interface TDStackVariable : NSObject
+//  NSMutableArray* _variables;
+//  
+//  NSString* _address;
+//  NSString* _name;
+//  NSString* _fullName;
+//  NSString* _className;
+//  NSString* _type;
+//  NSString* _facet;
+//  NSString* _size;
+//  NSString* _key;
+//  
+//  int _page;
+//  int _pageSize;
+//  
+//  BOOL _hasChildren;
+//  int _numChildren;
+//  
+//  BOOL _isBase64Encoding;
+//  NSString* _value;
+//  
+//
 
-@property (nonatomic,readonly,retain) NSString* address;
-@property (nonatomic,readonly,retain) NSString* name;
-@property (nonatomic,readonly,retain) NSString* fullName;
-@property (nonatomic,readonly,retain) NSString* className;
-@property (nonatomic,readonly,retain) NSString* type;
-@property (nonatomic,readonly,retain) NSString* facet;
+@property (nonatomic,readonly,retain) NSString *address;
+@property (nonatomic,readonly,retain) NSString *name;
+@property (nonatomic,readonly,retain) NSString *fullName;
+@property (nonatomic,readonly,retain) NSString *className;
+@property (nonatomic,readonly,retain) NSString *type;
+@property (nonatomic,readonly,retain) NSString *facet;
 @property (nonatomic,readonly) NSString* size;
 @property (nonatomic,readonly) NSString* key;
 @property (nonatomic,readonly) int page;
 @property (nonatomic,readonly) int pageSize;
 @property (nonatomic,readonly) BOOL hasChildren;
 @property (nonatomic,readonly) int numChildren;
-@property (nonatomic,assign) TDStackContext* stackContext;
+@property (weak, nonatomic) TDStackContext* stackContext;
 @property (nonatomic,readonly,retain) NSString* value;
-@property (nonatomic,retain) NSArray* variables;
+@property (strong, nonatomic) NSArray *variables;
 
 - (NSAttributedString*)attributedStringWithDefaultFont:(NSFont*)font;
 - (void)parsePropertyAttributes:(NSXMLElement*)xmlProperty;

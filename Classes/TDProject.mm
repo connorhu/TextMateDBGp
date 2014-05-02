@@ -54,15 +54,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [_networkController release];
-  [_bookmarks release];
-  [_bookmarkKeys release];
-  self.originalOutlineView = nil;
-  self.projectController = nil;
-  [super dealloc];
-}
-
 - (void)openFile:(id)item atLineNumber:(int)lineNumber {
   NSWindowController* wc = [self projectController];
   if ([item respondsToSelector:@selector(substringToIndex:)]) {
@@ -132,10 +123,9 @@
     if ([correspondingItemSet count] == 1) {
       id oldItem = [correspondingItemSet anyObject];
       if (oldItem != item) {
-        id itemData = [[_bookmarks objectForKey:oldItem] retain];
+        id itemData = [_bookmarks objectForKey:oldItem];
         [_bookmarks removeObjectForKey:oldItem];
         [_bookmarks setObject:itemData forKey:item];
-        [itemData release];
         bookmarks = [itemData objectForKey:@"bookmarks"];
         [_bookmarkKeys removeObject:oldItem];
       }
@@ -156,7 +146,6 @@
       if (currentBookmark == nil) {
         bookmark = [[TDBookmark alloc] init];
         [bookmarks addObject:bookmark];
-        [bookmark release];
         [diff addObject:[NSDictionary dictionaryWithObjectsAndKeys:
                          @"add", @"op",
                          bookmark, @"bookmark", nil]];
@@ -176,7 +165,6 @@
           // add a new bookmark
           bookmark = [[TDBookmark alloc] init];
           [bookmarks insertObject:bookmark atIndex:currentBookmarkIndex];
-          [bookmark release];
           ++currentBookmarkIndex;
           [diff addObject:[NSDictionary dictionaryWithObjectsAndKeys:
                            @"add", @"op",

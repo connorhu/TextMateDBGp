@@ -114,38 +114,33 @@
 {
 	NSMenu *viewMenu = [[[NSApp mainMenu] itemWithTitle:@"View"] submenu];
     
-	NSMenuItem *showHideDrawerMenuItem = nil;
-	NSInteger drawerMenuItemIndex = 0;
+	__block NSMenuItem *toggleFileBrowserMenuItem = nil;
+	__block NSInteger drawerMenuItemIndex = 0;
 	
 	MDSettings *settings = [MDSettings defaultSettings];
-	
-	for (NSMenuItem *menuItem in [viewMenu itemArray]) {
-		if ([[menuItem title] isEqualToString:@"Show/Hide Project Drawer"]) {
-			showHideDrawerMenuItem = menuItem;
-			drawerMenuItemIndex = [[viewMenu itemArray] indexOfObject:menuItem];
+
+	[viewMenu.itemArray enumerateObjectsUsingBlock:^(NSMenuItem *menuItem, NSUInteger idx, BOOL *stop) {
+		if ([[menuItem title] isEqualToString:@"Toggle File Browser"]) {
+			toggleFileBrowserMenuItem = menuItem;
+			drawerMenuItemIndex = idx;
 		}
-	}
+    }];
     
-	NSMenuItem *drawerSubmenuItem =  [[NSMenuItem alloc] initWithTitle:@"Project Drawer" action:nil keyEquivalent:@""];
-	NSMenu *drawerMenu = [[NSMenu alloc] initWithTitle:@"Project Drawer"];
+    if (!toggleFileBrowserMenuItem) return;
     
-	[drawerSubmenuItem setSubmenu:drawerMenu];
-	[drawerMenu addItem:settings.toggleSplitViewLayoutMenuItem];
-	[drawerMenu addItem:settings.focusSideViewMenuItem];
-    [drawerMenu addItem:settings.filterInDrawerMenuItem];
-    [drawerMenu addItem:[NSMenuItem separatorItem]];
-    [drawerMenu addItem:settings.navigatorViewMenuItem];
-    [drawerMenu addItem:settings.debuggerViewMenuItem];
-    [drawerMenu addItem:settings.breakpointsViewMenuItem];
+	NSMenuItem *debugSubmenuItem =  [[NSMenuItem alloc] initWithTitle:@"Debug panel" action:nil keyEquivalent:@""];
+	NSMenu *debugMenu = [[NSMenu alloc] initWithTitle:@"Debug panel"];
+    
+	[debugSubmenuItem setSubmenu:debugMenu];
+//	[debugMenu addItem:settings.toggleSplitViewLayoutMenuItem];
+//	[debugMenu addItem:settings.focusSideViewMenuItem];
+//  [debugMenu addItem:settings.filterInDrawerMenuItem];
+    [debugMenu addItem:[NSMenuItem separatorItem]];
+    [debugMenu addItem:settings.navigatorViewMenuItem];
+    [debugMenu addItem:settings.debuggerViewMenuItem];
+    [debugMenu addItem:settings.breakpointsViewMenuItem];
 
-	[showHideDrawerMenuItem retain];
-	[viewMenu removeItemAtIndex:drawerMenuItemIndex];
-	[drawerMenu insertItem:showHideDrawerMenuItem atIndex:0];
-	[viewMenu insertItem:drawerSubmenuItem atIndex:drawerMenuItemIndex];
-
-	[drawerSubmenuItem release];
-	[drawerMenu release];
-	[showHideDrawerMenuItem release];
+    [viewMenu insertItem:debugSubmenuItem atIndex:drawerMenuItemIndex + 1];
 }
 
 

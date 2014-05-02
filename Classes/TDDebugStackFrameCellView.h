@@ -26,13 +26,9 @@
 //	OTHER DEALINGS IN THE SOFTWARE.
 //
 
-@interface TDDebugStackFrameCellView : NSTableCellView {
-@private
-  IBOutlet NSTextField* stackDepthTextField;
-  IBOutlet NSTextField* filenameTextField;
-}
+@interface TDDebugStackFrameCellView : NSTableCellView
 
-@property (assign) NSTextField* stackDepthTextField;
-@property (assign) NSTextField* filenameTextField;
+@property (assign) IBOutlet NSTextField *stackDepthTextField;
+@property (assign) IBOutlet NSTextField *filenameTextField;
 
 @end

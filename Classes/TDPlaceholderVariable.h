@@ -29,15 +29,10 @@
 @class TDStackContext;
 @class TDStackVariable;
 
-@interface TDPlaceholderVariable : NSObject {
-  int _pageToLoad;
-  TDStackContext* _stackContext; //weak
-  TDStackVariable* _stackVariable; //weak
-  BOOL _requestMade;
-}
+@interface TDPlaceholderVariable : NSObject
 
 @property (nonatomic,assign) int pageToLoad;
-@property (nonatomic,assign) TDStackContext* stackContext;
-@property (nonatomic,assign) TDStackVariable* stackVariable;
+@property (weak, nonatomic) TDStackContext *stackContext;
+@property (weak, nonatomic) TDStackVariable *stackVariable;
 @property (nonatomic,assign) BOOL requestMade;
 @end

@@ -29,6 +29,5 @@
 #import "TDBookmarkFileCellView.h"
 
 @implementation TDBookmarkFileCellView
-@synthesize folderTextField;
 
 @end

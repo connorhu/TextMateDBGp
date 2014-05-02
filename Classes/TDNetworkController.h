@@ -30,17 +30,10 @@
 
 @class TDDebugSession;
 @class TDProject;
-@interface TDNetworkController : NSObject <GCDAsyncSocketDelegate> {
-  GCDAsyncSocket* _socket;
-  dispatch_queue_t _dispatchQueue;
-  NSMutableArray* _openSessions;
-  TDProject* _project; //weak
-  BOOL _bookmarksEnabled;
-  BOOL _firstLineBreak;
-}
+@interface TDNetworkController : NSObject <GCDAsyncSocketDelegate>
 
-@property (nonatomic,readonly) GCDAsyncSocket* socket;
-@property (nonatomic,assign) TDProject* project;
+@property (nonatomic,readonly) GCDAsyncSocket *socket;
+@property (weak, nonatomic) TDProject *project;
 @property (nonatomic,readonly) TDDebugSession* currentOpenSession;
 @property (nonatomic,assign) BOOL bookmarksEnabled;
 @property (nonatomic,assign) BOOL firstLineBreak;

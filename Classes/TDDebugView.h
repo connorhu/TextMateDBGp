@@ -33,9 +33,9 @@
 
 @interface TDDebugView : NSView <GCDAsyncSocketDelegate, NSTableViewDataSource, NSTableViewDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate>
 
-@property (nonatomic,retain) TDProject* project;
-@property (nonatomic,assign) TDSidebar* sidebar;
-@property (nonatomic,retain) NSColor* backgroundColor;
+@property (strong, nonatomic) TDProject *project;
+@property (weak, nonatomic) TDSidebar *sidebar;
+@property (strong, nonatomic) NSColor *backgroundColor;
 @property (assign) NSButton* connectButton;
 @property (assign) NSButton* firstLineButton;
 @property (assign) NSTextField* statusLabel;

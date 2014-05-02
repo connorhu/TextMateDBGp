@@ -29,6 +29,5 @@
 #import "TDDebugStackFrameCellView.h"
 
 @implementation TDDebugStackFrameCellView
-@synthesize stackDepthTextField;
-@synthesize filenameTextField;
+
 @end

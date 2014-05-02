@@ -29,10 +29,6 @@
 #import "TDPlaceholderVariable.h"
 
 @implementation TDPlaceholderVariable
-@synthesize pageToLoad = _pageToLoad;
-@synthesize stackContext = _stackContext;
-@synthesize stackVariable = _stackVariable;
-@synthesize requestMade = _requestMade;
 
 - (id)init {
   if (!(self = [super init]))

@@ -26,10 +26,6 @@
 //	OTHER DEALINGS IN THE SOFTWARE.
 //
 
-@interface TDBookmarkFileCellView : NSTableCellView {
-@private
-  IBOutlet NSTextField* folderTextField;
-}
-
-@property (assign) NSTextField* folderTextField;
+@interface TDBookmarkFileCellView : NSTableCellView
+@property (assign) NSTextField *folderTextField;
 @end

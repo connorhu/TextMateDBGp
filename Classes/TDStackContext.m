@@ -34,18 +34,11 @@
 @synthesize name = _name;
 @synthesize contextId = _id;
 @synthesize variables = _variables;
-@synthesize stackFrame = _stackFrame;
 
 - (id)init {
   if (!(self = [super init]))
     return nil;
   return self;
-}
-
-- (void)dealloc {
-  self.name = nil;
-  [_variables release];
-  [super dealloc];
 }
 
 - (NSString *)description {
@@ -67,7 +60,6 @@
     
     TDStackVariable* variable = [[TDStackVariable alloc] init];
     [_variables addObject:variable];
-    [variable release];
     
     variable.stackContext = self;
     [variable parsePropertyAttributes:xmlProperty];

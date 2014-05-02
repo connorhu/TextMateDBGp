@@ -46,10 +46,6 @@
   bookmark.bookmarkId = _bookmarkId;
   return bookmark;
 }
-- (void)dealloc {
-  self.source = nil;
-  [super dealloc];
-}
 
 - (BOOL)bookmarkIdDetermined {
   return _bookmarkId != -1;

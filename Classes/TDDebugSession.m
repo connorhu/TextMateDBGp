@@ -58,7 +58,7 @@
   if (!(self = [super init]))
     return nil;
   
-  _socket = [socket retain];
+  _socket = socket;
   _controller = networkController;
   _state = WaitingForContact;
   _stackFrames = [[NSMutableArray alloc] init];
@@ -66,18 +66,13 @@
   return self;
 }
 
-- (void)dealloc {
-  [_socket setDelegate:nil];
-  if ([_socket isConnected])
-    [_socket disconnect];
-  [_socket release];
-  
-  [_stackFrames release];
-  self.lastStatus = nil;
-  self.lastReason = nil;
-  self.lastCommand = nil;
-  [_transactionData release];
-  [super dealloc];
+- (void)dealloc
+{
+    _socket.delegate = nil;
+    
+    if ([_socket isConnected]) {
+        [_socket disconnect];
+    }
 }
 
 - (void)startHandshake {
@@ -149,7 +144,6 @@
         for (NSXMLElement* frame in [[xmlResponse rootElement] children]) {
           TDStackFrame* sf = [[TDStackFrame alloc] initWithXMLElement:frame];
           [_stackFrames addObject:sf];
-          [sf release];
         }
         dispatch_async(dispatch_get_main_queue(), ^() {
           [[NSNotificationCenter defaultCenter] postNotificationName:TDDebugSessionDidBreakNotification object:self];

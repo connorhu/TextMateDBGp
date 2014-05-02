@@ -35,11 +35,17 @@
 static NSMutableData* s_sentinel = nil;
 static int s_transactionId = 0;
 
+@interface TDNetworkController()
+{
+    dispatch_queue_t _dispatchQueue;
+    NSMutableArray* _openSessions;
+    BOOL _bookmarksEnabled;
+    BOOL _firstLineBreak;
+}
+
+@end
+
 @implementation TDNetworkController
-@synthesize socket = _socket;
-@synthesize project = _project;
-@synthesize bookmarksEnabled = _bookmarksEnabled;
-@synthesize firstLineBreak = _firstLineBreak;
 
 + (void)load {
   s_sentinel = [[NSMutableData alloc] initWithLength:1];
@@ -55,14 +61,12 @@ static int s_transactionId = 0;
   return self;
 }
 
-- (void)dealloc {
-  [_openSessions release];
-  
-  [_socket setDelegate:nil];
-  [_socket disconnect];
-  [_socket release];
-  dispatch_release(_dispatchQueue);
-  [super dealloc];
+- (void)dealloc
+{
+    _socket.delegate = nil;
+    [_socket disconnect];
+    _socket = nil;
+    dispatch_release(_dispatchQueue);
 }
 
 - (TDDebugSession*)currentOpenSession {
@@ -93,7 +97,6 @@ static int s_transactionId = 0;
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket {
   TDDebugSession* newSession = [[TDDebugSession alloc] initWithSocket:newSocket controller:self];
   [_openSessions addObject:newSession];
-  [newSession release];
   
   [self session:newSession readResponseWithTag:TAG_INITIAL_CONNECTION];
   [[NSNotificationCenter defaultCenter] postNotificationName:TDNetworkControllerDidAcceptNewSocketNotification object:self];
@@ -103,7 +106,7 @@ static int s_transactionId = 0;
   if ((tag & TAG_MASK) == TAG_DATA_LENGTH)
     return;
   
-  NSString* response = [[[NSString alloc] initWithBytes:data.bytes length:data.length encoding:NSUTF8StringEncoding] autorelease];
+  NSString* response = [[NSString alloc] initWithBytes:data.bytes length:data.length encoding:NSUTF8StringEncoding];
   MDLog(@"%d %@", tag, response);
   // Test if we can convert it into an NSXMLDocument.
   NSError* error = nil;
@@ -118,7 +121,6 @@ static int s_transactionId = 0;
     if (session.socket == sock)
       [session didReadData:xml withTag:tag];
   }
-  [xml release];
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {

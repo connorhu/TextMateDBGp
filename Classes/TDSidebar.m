@@ -35,19 +35,6 @@
 #import "TDProject.h"
 #import "TDProjectNavigatorView.h"
 
-@interface TDSidebar()
-{
-    IBOutlet NSMatrix* toolbar;
-    IBOutlet NSView* contentView;
-    
-    TDProjectNavigatorView* _navigatorView;
-    TDDebugView* _debugView;
-    TDBookmarksView* _bookmarksView;
-    TDProject* _project;
-}
-
-@end
-
 @interface TDSidebar ()
 - (void)menuItemClicked:(id)sender;
 @end
@@ -96,9 +83,9 @@
 }
 
 - (void)adjustLayout {
-  NSRect frame = toolbar.frame;
+  NSRect frame = _toolbar.frame;
   frame.origin.x = (self.bounds.size.width - frame.size.width) / 2;
-  toolbar.frame = frame;
+  _toolbar.frame = frame;
   [self.navigatorView adjustLayout];
 }
 
@@ -107,10 +94,10 @@
 }
 
 - (void)toolbarClicked:(id)sender {
-  int column = [toolbar selectedColumn];
+  int column = [_toolbar selectedColumn];
   
-  if ([[contentView subviews] count] > 0)
-    [[[contentView subviews] objectAtIndex:0] removeFromSuperview];
+  if ([[_contentView subviews] count] > 0)
+    [[[_contentView subviews] objectAtIndex:0] removeFromSuperview];
   
   NSView* panel = nil;
   switch (column) {
@@ -124,8 +111,8 @@
       panel = self.bookmarksView;
       break;
   }
-  panel.frame = contentView.bounds;
-  [contentView addSubview:panel];
+  panel.frame = _contentView.bounds;
+  [_contentView addSubview:panel];
   
   // update menu items
 	MDSettings *settings = [MDSettings defaultSettings];
@@ -135,14 +122,14 @@
 }
 
 - (SidebarTab)selectedTab {
-  return [toolbar selectedColumn];
+  return [_toolbar selectedColumn];
 }
 
 - (void)selectTab:(SidebarTab)tab {
-  if ([toolbar selectedColumn] == tab)
+  if ([_toolbar selectedColumn] == tab)
     return;
   
-  [toolbar selectCellAtRow:0 column:tab];
-  [self toolbarClicked:toolbar];
+  [_toolbar selectCellAtRow:0 column:tab];
+  [self toolbarClicked:_toolbar];
 }
 @end

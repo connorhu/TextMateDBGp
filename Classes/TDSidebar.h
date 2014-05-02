@@ -35,8 +35,8 @@
 
 @interface TDSidebar : NSView <NSMatrixDelegate>
 
-@property (assign) NSMatrix *toolbar;
-@property (assign) NSView *contentView;
+@property (assign) IBOutlet NSMatrix *toolbar;
+@property (assign) IBOutlet NSView *contentView;
 @property (nonatomic,retain) IBOutlet TDProjectNavigatorView *navigatorView;
 @property (nonatomic,retain) IBOutlet TDDebugView *debugView;
 @property (nonatomic,retain) IBOutlet TDBookmarksView *bookmarksView;

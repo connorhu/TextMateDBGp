@@ -80,12 +80,6 @@
   [OakTextView jr_swizzleMethod:@selector(mouseDown:) withMethod:@selector(TD_mouseDown:) error:NULL];  
 }
 
-- (void)dealloc {
-  self.outlineView = nil;
-  self.project = nil;
-  [super dealloc];
-}
-
 - (void)drawRect:(NSRect)dirtyRect {
   [[_outlineView backgroundColor] setFill];
   NSRectFill(dirtyRect);
